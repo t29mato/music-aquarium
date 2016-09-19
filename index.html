@@ -10,18 +10,20 @@
     <h2>aquarium</h2>
     <p>
       水槽をクリックすると魚が増えます。<br />
-      壁にぶつかると音がなって向きが変わります。
     </p>
     <canvas id="mycanvas" width="600" height="300">
       Canvasに対応したブラウザをご用意ください。
     </canvas>
-    <div class="">
+    <div>
       <button id="resetTank">リセット</button>
       <button id="addFish">魚を追加</button>
       <button id="removeFish">魚を除去</button>
       <button id="addGrass">水草を追加</button>
       <button id="removeGrass">水草を除去</button>
     </div>
+    <br />
+    <h3>現在の水槽の状況</h3>
+    <div id="status"></div>
   </div>
   <audio id="fishTurn" preload="auto">
     <source src="fishTurn.mp3" type="audio/mp3">
@@ -40,7 +42,7 @@
     var addFish = document.getElementById("addFish");
     var removeFish = document.getElementById("removeFish");
     var resetTank = document.getElementById("resetTank");
-
+    var status = document.getElementById('status')
     canvas = document.getElementById('mycanvas');
     if (!canvas || !canvas.getContext) return false;
     ctx = canvas.getContext('2d');
@@ -93,16 +95,15 @@
       var x, y, s;
       x = rand(0, canvas.width - 15);
       y = canvas.height * 0.9;
-      s = rand(0, 30) < 20 ? rand(20, 30) : rand(10, 15);
+      s = rand(10, 60) < 30 ? rand(50, 60) : rand(10, 30);
       grasses.push(new Grass(x, y, s));
     });
 
     removeFish.addEventListener('click', function() {
-      var x, y, s;
-      x = 100;
-      y = 100;
-      s = rand(0, 60) < 20 ? rand(40, 60) : rand(10, 20);
       fishes.shift();
+    });
+    removeGrass.addEventListener('click', function() {
+      grasses.shift();
     });
     resetTank.addEventListener('click', function() {
       fishes = [];
@@ -180,8 +181,8 @@
       this.x = x;
       this.y = y;
       this.s = s;
-      this.vx = rand(-10, 10);
-      this.vy = rand(-10, 10);
+      this.vx = rand(-2, 2);
+      this.vy = rand(-2, 2);
       this.color_h = rand(200, 220);
       this.color_s = rand(80, 100);
       this.color_l = rand(40, 60);
@@ -234,7 +235,7 @@
       this.move = function() {
         if (this.x + this.s * 2 > canvas.width || this.x - this.s * 2 < 0){
           this.vx *= -1;
-          ring();
+          // ring();
         }
         if (this.y + this.s * 0.7 > canvas.height * 0.9 || this.y - this.s * 0.7 < 0){
           this.vy *= -1;
@@ -262,15 +263,15 @@
         fishes[i].draw();
         fishes[i].move();
       }
+      console.log(fishes.length);
+      status.innerHTML = "<p>" + "水槽の中の魚の数は" + fishes.length + "匹で、" + "水草の束の数は" + grasses.length + "束です。" + "</p>";
       setTimeout(function() {
         update();
       }, 20);
     }
 
     update();
-
   })();
-
 
 
   </script>
