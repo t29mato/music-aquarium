@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>Interactive Art</title>
+</head>
+<body>
+  <h2>aquarium</h2>
+  <p>
+    水槽をクリックすると魚が増えます。
+  </p>
+  <canvas id="mycanvas" width="600" height="300">
+    Canvasに対応したブラウザをご用意ください。
+  </canvas>
+  <script>
+  (function() {
+    'use strict';
+
+    var canvas;
+    var ctx;
+    var Fish;
+    var fishes = [];
+
+    canvas = document.getElementById('mycanvas');
+    if (!canvas || !canvas.getContext) return false;
+    ctx = canvas.getContext('2d');
+
+    function rand(min, max) {
+      // 0-n
+      // Math.floor(Math.randam() * (n + 1))
+      //min-max
+      return min + Math.floor(Math.random() * (max - min + 1));
+    }
+
+    canvas.addEventListener('click', function(e) {
+      var x, y, s;
+      var rect;
+      // x = rand(100, 400);
+      // y = rand(100, 400);
+      rect = e.target.getBoundingClientRect();
+      x = e.clientX - rect.left;
+      y = e.clientY - rect.top;
+      s = rand(0, 100) < 20 ? rand(50, 80) : rand(10, 35);
+
+      if (x + s * 2.5 > canvas.width) {
+        x = canvas.width - s * 2.5;
+      }
+      if (y + s > canvas.height) {
+        y = canvas.height - s;
+      } else if (y - s < 0) {
+        y = s;
+      }
+      fishes.push(new Fish(x, y, s));
+    });
+
+    Fish = function(x, y, s) {
+      this.x = x;
+      this.y = y;
+      this.s = s;
+      this.vx = rand(-10, 10);
+      this.vy = rand(-10, 10);
+      this.color_h = rand(200, 220);
+      this.color_s = rand(80, 100);
+      this.color_l = rand(40, 60);
+      this.color_a = Math.random() * (1 - 0.5) + 0.5;
+      this.color = 'hsla(' + this.color_h + ', ' + this.color_s + '%, ' + this.color_l + '%, ' + this.color_a + ')';
+      this.draw = function() {
+        // ctx.beginPath();
+        // ctx.moveTo(this.x, this.y);
+        // ctx.lineTo(this.s, this.s);
+        // ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x + this.s, this.y - this.s);
+        ctx.lineTo(this.x + this.s * 2, this.y);
+        ctx.lineTo(this.x + this.s * 2.5, this.y - this.s / 2);
+        ctx.lineTo(this.x + this.s * 2.5, this.y + this.s / 2);
+        ctx.lineTo(this.x + this.s * 2, this.y);
+        ctx.lineTo(this.x + this.s, this.y + this.s);
+        ctx.fillStyle = this.color;
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(this.x + this.s * 0.7, this.y - this.s * 0.2, this.s / 7, 0, Math.PI*2);
+        ctx.fillStyle = this.color;
+        ctx.closePath();
+        ctx.fill();
+      };
+      this.move = function() {
+        if (this.x + this.s * 2.5 > canvas.width || this.x < 0){
+          this.vx *= -1;
+        }
+        if (this.y + this.s > canvas.height || this.y - this.s < 0){
+          this.vy *= -1;
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+    };
+
+    var fish = new Fish(rand(100, 200), rand(100, 200), rand(10, 50));
+    fish.draw();
+
+    function update() {
+      var i;
+      ctx.fillStyle = '#0099ff'
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      for (i = 0; i < fishes.length; i++){
+        fishes[i].draw();
+        fishes[i].move();
+      }
+      setTimeout(function() {
+        update();
+      }, 30);
+    }
+
+    update();
+
+  })();
+
+
+
+  </script>
+</body>
+</html>
