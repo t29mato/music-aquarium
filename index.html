@@ -25,10 +25,14 @@
     <h3>現在の水槽の状況</h3>
     <div id="status"></div>
   </div>
-  <audio id="fishTurn" preload="auto">
-    <source src="fishTurn.mp3" type="audio/mp3">
-    <p>※お使いのブラウザでは音は鳴りません。</p>
-  </audio>
+  <audio id="A4"><source src="MagicSound/wav/A4.wav" type="audio/mp3"></audio>
+  <audio id="B4"><source src="MagicSound/wav/B4.wav" type="audio/mp3"></audio>
+  <audio id="C4"><source src="MagicSound/wav/C4.wav" type="audio/mp3"></audio>
+  <audio id="D4"><source src="MagicSound/wav/D4.wav" type="audio/mp3"></audio>
+  <audio id="E4"><source src="MagicSound/wav/E4.wav" type="audio/mp3"></audio>
+  <audio id="F4"><source src="MagicSound/wav/F4.wav" type="audio/mp3"></audio>
+  <audio id="G4"><source src="MagicSound/wav/G4.wav" type="audio/mp3"></audio>
+  <audio id="A5"><source src="MagicSound/wav/A5.wav" type="audio/mp3"></audio>
   <script>
   (function() {
     'use strict';
@@ -43,9 +47,13 @@
     var removeFish = document.getElementById("removeFish");
     var resetTank = document.getElementById("resetTank");
     var status = document.getElementById('status')
+    var j = 7;
+
+
     canvas = document.getElementById('mycanvas');
     if (!canvas || !canvas.getContext) return false;
     ctx = canvas.getContext('2d');
+
 
     function rand(min, max) {
       // 0-n
@@ -54,11 +62,13 @@
       return min + Math.floor(Math.random() * (max - min + 1));
     }
 
-    function ring() {
-      var sound = document.getElementById("fishTurn");
+    var ring = function(m) {
+      var wav = m;
+      var sound = document.getElementById(wav);
       sound.load();
       sound.play();
-    }
+      // console.log(sound);
+    };
 
     canvas.addEventListener('click', function(e) {
       var x, y, s;
@@ -235,7 +245,29 @@
       this.move = function() {
         if (this.x + this.s * 2 > canvas.width || this.x - this.s * 2 < 0){
           this.vx *= -1;
-          // ring();
+          if(j % 7 == 0) {
+            ring("C4");
+          } else if(j % 7 == 1) {
+            ring("D4");
+          } else if(j % 7 == 2) {
+            ring("E4");
+          } else if(j % 7 == 3) {
+            ring("F4");
+          } else if(j % 7 == 4) {
+            ring("G4");
+          } else if(j % 7 == 5) {
+            ring("A4");
+          } else if(j % 7 == 6) {
+            ring("B4");
+          }
+          console.log(j % 7);
+          j += 1;
+          // ring("D4");
+          // ring("E4");
+          // ring("F4");
+          // ring("G4");
+          // ring("A4");
+          // ring("B4");
         }
         if (this.y + this.s * 0.7 > canvas.height * 0.9 || this.y - this.s * 0.7 < 0){
           this.vy *= -1;
@@ -263,7 +295,7 @@
         fishes[i].draw();
         fishes[i].move();
       }
-      console.log(fishes.length);
+      // console.log(fishes.length);
       status.innerHTML = "<p>" + "水槽の中の魚の数は" + fishes.length + "匹で、" + "水草の束の数は" + grasses.length + "束です。" + "</p>";
       setTimeout(function() {
         update();
