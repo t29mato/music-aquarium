@@ -9,7 +9,7 @@
 </head>
 <body class=bs-docs-home>
   <div class="container bs-docs-featurette" id="display">
-    <h2 align="center">Music Aqualium　〜 魚しかいない音楽会 〜</h2>
+    <h2 align="center">Music Aqualium　〜 魚しかいない音楽会 〜　ゆとり.ver</h2>
     <h5 align="center">水槽に魚を入れてクイズに答えて、あの名曲を聞こう！</h5>
     <p>
       水槽もしくは「魚を追加」ボタンをクリックして魚を増やしましょう。魚は壁にぶつかると反対方向に進みます。<br />
@@ -31,7 +31,7 @@
     <div id="status"></div>
     <div id="question">
       <h3>【問題】この曲はな〜んだ？</h3>
-      【ヒント】水草を108束植えると。。。</div>
+      【ヒント】水草を8束植えると。。。こんなんすぐじゃん>_<...</div>
       【回答フォーム】<input type="text" id="ansText" />
       <button id="ans">回答する</button><br />
       （全角大文字・カタカナ）<br /><br />
@@ -287,7 +287,7 @@
       this.move = function() {
         if (this.x + this.s * 2 > canvas.width || this.x - this.s * 2 < 0){
           this.vx *= -1;
-          if(grasses.length < 108) {
+          if(grasses.length < 8) {
             if(j % 8 == 0) {
               ring("C4");
             } else if(j % 8 == 1) {
@@ -307,7 +307,7 @@
             }
             j += 1;
           }
-          if(grasses.length > 107) {
+          if(grasses.length > 7) {
             if(k == 0){
               ring("G4"); // ソ
             } else if(k == 1){
